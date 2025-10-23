@@ -137,7 +137,7 @@ async fn install_to_path() -> anyhow::Result<()> {
         fs::create_dir_all(&bin_dir)?;
         println!("Created directory: {}", bin_dir.display());
     }
-    
+     
     // Copy executable to bin directory
     let target_path = bin_dir.join("clapscan");
     fs::copy(&current_exe, &target_path)?;
