@@ -2,6 +2,10 @@
 name = "clapscan"
 version = "0.1.0"
 edition = "2021"
+description = "Fast TCP port scanner"
+license = "MIT"
+authors = ["ZikaTerror"]
+repository = "https://github.com/ZikaTerror/ClapScan"
 
 [dependencies]
 tokio = { version = "1.0", features = ["full"] }
