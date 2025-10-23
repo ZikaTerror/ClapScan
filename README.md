@@ -2,9 +2,12 @@
 
 ## How to Install & use
 
-## Get the latest release from [Releases page](https://github.com/ZikaTerror/ClapScan/releases) (recommended)
+## Method 1: Cargo (recommended):
+```bash
+cargo install --git https://github.com/ZikaTerror/ClapScan
+```
 
-## Build from source (Not recommended):
+## Method 2: Build from source (Not recommended):
 
 ### Prerequisites
 - Rust 1.70+ (https://rustup.rs/)
@@ -16,3 +19,4 @@ run build.bat
 
 # 2. Run scanner
 clapscan --help
+```
