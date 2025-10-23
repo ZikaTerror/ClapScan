@@ -9,24 +9,22 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Rust
-        run: |
-          rustup update stable
-          rustup target add x86_64-pc-windows-gnu
-      
+        run: rustup update stable
+
       - name: Build
-        run: cargo build --release --target x86_64-pc-windows-gnu
-      
+        run: cargo build --release
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: clapscan-windows
-          path: target/x86_64-pc-windows-gnu/release/clapscan.exe
-      
+          path: target/release/clapscan.exe
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/x86_64-pc-windows-gnu/release/clapscan.exe
+          files: target/release/clapscan.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
