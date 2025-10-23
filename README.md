@@ -2,7 +2,7 @@
 
 ## How to Install & use
 
-## Get the latest release from [Releases page](https://github.com/SEU_USER/ClapScan/releases) (recommended)
+## Get the latest release from [Releases page](https://github.com/ZikaTerror/ClapScan/releases) (recommended)
 
 ## Build from source (Not recommended):
 
