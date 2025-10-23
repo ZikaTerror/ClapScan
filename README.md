@@ -1,13 +1,9 @@
 # ClapScan - Port Scanner
 
-## How to Install
+## How to Install & use
 
-### Prerequisites
-- Rust 1.70+ (https://rustup.rs/)
-
-### How to use
 ```bash
-# 1. Build
+# 1. Run build script
 run build.bat
 
 # 2. Run scanner
