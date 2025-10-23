@@ -9,18 +9,17 @@ use std::fs;
 use std::path::PathBuf;
 use directories::UserDirs;
 
-// ...existing code...
 #[derive(Parser, Debug)]
-#[command(name = "clapscan", about = "Simple async TCP connect scanner")]
+#[command(name = "clapscan", about = "Simple port scanner")]
 struct Args {
-    /// Target hostname or IP (single)
+    /// Target hostname or IP
     target: String,
 
-    /// Ports spec: e.g. "22,80,443" or "1-1024"
+    /// Ports "22,80,443" or "1-1024"
     #[arg(short = 'p', long = "ports", default_value = "1-1000")]
     ports: String,
 
-    /// Concurrency (number of simultaneous connect tasks)
+    /// Concurrency, number of simultaneous connect tasks
     #[arg(short = 'c', long = "concurrency", default_value = "200")]
     concurrency: usize,
 
@@ -43,7 +42,7 @@ struct Finding {
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // Handle install/uninstall flags before Clap parses args (Clap would error on unknown flags)
+    // Handle install/uninstall flags before parsing args
     if env::args().any(|arg| arg == "--install") {
         return install_to_path().await;
     }
@@ -56,11 +55,9 @@ async fn main() -> anyhow::Result<()> {
     let ports = parse_ports(&args.ports)?;
     let timeout = Duration::from_millis(args.timeout_ms);
 
-    println!("🔍 Starting scan of {} ({} ports)...", args.target, ports.len());
-
-    // Resolve host
+    println!("Starting scan of {} ({} ports)...", args.target, ports.len());
     let ip = resolve_host(&args.target).await?;
-    println!("📡 Target IP: {}", ip);
+    println!("Target IP: {}", ip);
 
     // Build tasks
     let tasks = ports.into_iter().map(|port| {
@@ -109,51 +106,45 @@ async fn main() -> anyhow::Result<()> {
         println!("{}", serde_json::to_string_pretty(&results)?);
     } else {
         let open_ports_count = results.len();
-        println!("📊 Scan completed! Found {} open ports:", open_ports_count);
-        
-        // CORREÇÃO: Usar referência &results em vez de mover
+        println!("Scan completed! Found {} open ports:", open_ports_count);
         for r in &results {
             match &r.banner {
-                Some(b) => println!("✅ {}:{} open | {}", r.host, r.port, b),
-                None => println!("✅ {}:{} open", r.host, r.port),
+                Some(b) => println!("{}:{} open | {}", r.host, r.port, b),
+                None => println!("{}:{} open", r.host, r.port),
             }
         }
-        
-        // CORREÇÃO: Agora podemos usar results.is_empty() porque não movemos
         if results.is_empty() {
-            println!("❌ No open ports found");
+            println!("No open ports found");
         }
     }
 
     Ok(())
 }
 
-// Novas funções para install/uninstall
 async fn install_to_path() -> anyhow::Result<()> {
-    println!("🚀 Installing ClapScan to PATH...");
+    println!("Installing ClapScan to PATH...");
     
     // Get current executable path
     let current_exe = env::current_exe()?;
     
-    // Get user's bin directory (usually in PATH)
+    // Get user's bin directory
     let user_dirs = UserDirs::new().ok_or_else(|| anyhow::anyhow!("Could not find user directories"))?;
     let home_dir = user_dirs.home_dir();
     let bin_dir = home_dir.join("bin");
     
-    // Create bin directory if it doesn't exist
+    // Create bin directory if doesn't exist
     if !bin_dir.exists() {
         fs::create_dir_all(&bin_dir)?;
         println!("Created directory: {}", bin_dir.display());
     }
     
     // Copy executable to bin directory
-    let target_path = bin_dir.join("clapscan.exe");
+    let target_path = bin_dir.join("clapscan");
     fs::copy(&current_exe, &target_path)?;
     
-    println!("✅ ClapScan installed successfully!");
-    println!("📁 Location: {}", target_path.display());
-    println!("💡 You can now use 'clapscan' from anywhere!");
-    println!("   Example: clapscan google.com -p 80,443");
+    println!("ClapScan installed successfully!");
+    println!("Location: {}", target_path.display());
+    println!("Example: clapscan google.com -p 80,443");
     println!("");
     println!("To uninstall, run: clapscan --uninstall");
     
@@ -161,7 +152,7 @@ async fn install_to_path() -> anyhow::Result<()> {
 }
 
 async fn uninstall_from_path() -> anyhow::Result<()> {
-    println!("🗑️ Uninstalling ClapScan from PATH...");
+    println!("Uninstalling ClapScan from PATH...");
     
     let user_dirs = UserDirs::new().ok_or_else(|| anyhow::anyhow!("Could not find user directories"))?;
     let home_dir = user_dirs.home_dir();
@@ -169,15 +160,14 @@ async fn uninstall_from_path() -> anyhow::Result<()> {
     
     if target_path.exists() {
         fs::remove_file(&target_path)?;
-        println!("✅ ClapScan uninstalled successfully!");
+        println!("ClapScan uninstalled successfully!");
     } else {
-        println!("❌ ClapScan not found in PATH");
+        println!("ClapScan not found in PATH");
     }
     
     Ok(())
 }
 
-// ...existing code...
 fn parse_ports(spec: &str) -> anyhow::Result<Vec<u16>> {
     let mut ports = Vec::new();
     for part in spec.split(',') {
