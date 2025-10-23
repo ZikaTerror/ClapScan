@@ -7,11 +7,8 @@
 
 ### How to use
 ```bash
-# Clone the project
-git clone https://github.com/ZikaTerror/ClapScan.git
-
-# Build
+# 1. Build
 run build.bat
 
-# Run scanner
+# 2. Run scanner
 clapscan --help
