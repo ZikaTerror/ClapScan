@@ -2,21 +2,25 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: x86_64-pc-windows-gnu
+          override: true
       
-      - name: Build
+      - name: Build Windows
         run: cargo build --release --target x86_64-pc-windows-gnu
       
-      - name: Upload
+      - name: Upload Windows Binary
         uses: actions/upload-artifact@v3
         with:
           name: clapscan-windows
