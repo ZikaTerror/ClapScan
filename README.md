@@ -1,18 +1,17 @@
-# ClapScan - TCP Port Scanner
+# ClapScan - Port Scanner
 
-## Build Instructions
+## How to Install
 
 ### Prerequisites
 - Rust 1.70+ (https://rustup.rs/)
 
-### Quick Start
+### How to use
 ```bash
 # Clone the project
-git clone <repository>
-cd ClapScan
+git clone https://github.com/ZikaTerror/ClapScan.git
 
-# Build release version
-cargo build --release
+# Build
+run build.bat
 
 # Run scanner
-./target/release/clapscan --help
+clapscan --help
